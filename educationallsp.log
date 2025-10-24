@@ -1,0 +1,8 @@
+[educationallsp] 2025/10/24 16:50:48 main.go:17: Starting educationallsp
+[educationallsp] 2025/10/24 16:50:48 main.go:33: Received message:  initialize
+[educationallsp] 2025/10/24 16:50:48 main.go:41: Connect to: Neovim 0.11.4
+[educationallsp] 2025/10/24 16:50:48 main.go:47: Sent the reply.
+[educationallsp] 2025/10/24 16:50:48 main.go:33: Received message:  initialized
+[educationallsp] 2025/10/24 16:50:56 main.go:33: Received message:  textDocument/didSave
+[educationallsp] 2025/10/24 16:50:56 main.go:33: Received message:  shutdown
+[educationallsp] 2025/10/24 16:50:56 main.go:49: Shutting down
