@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"educationallsp/analysis"
 	"educationallsp/lsp"
 	"educationallsp/rpc"
 	"encoding/json"
@@ -18,6 +19,9 @@ func main(){
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(rpc.Split)
+
+	state := analysis.NewState()
+
 	for scanner.Scan() {
 		msg := scanner.Bytes()
 		method, content, err := rpc.DecodeMessage(msg)
@@ -25,11 +29,11 @@ func main(){
 			logger.Println("Error decoding message: ", err)
 			continue
 		}
-		handleMessage(logger, method, content)
+		handleMessage(logger, state, method, content)
 	}
 }
 
-func handleMessage(logger *log.Logger, method string, content []byte){
+func handleMessage(logger *log.Logger, state analysis.State, method string, content []byte){
 	logger.Println("Received message: ", method)
 	switch method {
 	case "initialize":
@@ -45,6 +49,14 @@ func handleMessage(logger *log.Logger, method string, content []byte){
 		writer.Write([]byte(rpc.EncodeMessage(response)))
 
 		logger.Print("Sent the reply.")
+	case "textDocument/didOpen":
+		var notification lsp.DidOpenTextDocumentNotification
+		if err := json.Unmarshal(content, &notification); err != nil {
+			logger.Println("Error unmarshalling did open text document notification: ", err)
+			return
+		}
+		logger.Printf("Did open text document: %s %s", notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
+		state.OpenDocument(notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
 	case "shutdown":
 		logger.Println("Shutting down")
 	case "exit":

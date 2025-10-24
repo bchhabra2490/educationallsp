@@ -8,7 +8,7 @@ An simple Language Server Protocol (LSP) implementation in Go for educational pu
 - JSON-RPC over stdio communication
 - Neovim integration
 - Logging for debugging
-
+-
 ## Project Structure
 
 ```
