@@ -1,12 +1,11 @@
-[educationallsp] 2025/10/25 11:19:38 main.go:19: Starting educationallsp
-[educationallsp] 2025/10/25 11:19:38 main.go:38: Received message:  initialize
-[educationallsp] 2025/10/25 11:19:38 main.go:46: Connect to: Neovim 0.11.4
-[educationallsp] 2025/10/25 11:19:38 main.go:38: Received message:  initialized
-[educationallsp] 2025/10/25 11:19:38 main.go:38: Received message:  textDocument/didOpen
-[educationallsp] 2025/10/25 11:19:45 main.go:38: Received message:  textDocument/hover
-[educationallsp] 2025/10/25 11:19:45 state.go:39: Hovering over line: 	scanner := bufio.NewScanner(os.Stdin)
-[educationallsp] 2025/10/25 11:19:46 explanation_service.go:24: Explanation:  The line of code creates a new scanner object that reads input from the standard input (like keyboard input). This scanner can be used to break the input into tokens (like words or lines) for easier processing.
-[educationallsp] 2025/10/25 11:19:46 main.go:38: Received message:  textDocument/didOpen
-[educationallsp] 2025/10/25 11:19:55 main.go:38: Received message:  textDocument/didClose
-[educationallsp] 2025/10/25 11:19:58 main.go:38: Received message:  shutdown
-[educationallsp] 2025/10/25 11:19:58 main.go:75: Shutting down
+[educationallsp] 2025/10/25 12:03:49 main.go:19: Starting educationallsp
+[educationallsp] 2025/10/25 12:03:49 main.go:38: Received message:  initialize
+[educationallsp] 2025/10/25 12:03:49 main.go:46: Connect to: Neovim 0.11.4
+[educationallsp] 2025/10/25 12:03:49 main.go:38: Received message:  initialized
+[educationallsp] 2025/10/25 12:03:49 main.go:38: Received message:  textDocument/didOpen
+[educationallsp] 2025/10/25 12:04:01 main.go:38: Received message:  textDocument/hover
+[educationallsp] 2025/10/25 12:04:01 state.go:39: Hovering over line: 		method, content, err := rpc.DecodeMessage(msg)
+[educationallsp] 2025/10/25 12:04:04 explanation_service.go:24: Explanation:  This line of code takes a message received (msg), decodes it into three parts: a method (like an action or command), content (the data associated with that command), and an error (if something went wrong during decoding). It uses the function DecodeMessage from the rpc package to perform this operation.
+[educationallsp] 2025/10/25 12:04:04 main.go:38: Received message:  textDocument/didOpen
+[educationallsp] 2025/10/25 12:04:22 main.go:38: Received message:  shutdown
+[educationallsp] 2025/10/25 12:04:22 main.go:89: Shutting down

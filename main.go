@@ -71,6 +71,21 @@ func handleMessage(logger *log.Logger, writer io.Writer, state analysis.State, m
 			return
 		}
 		writeResponse(writer, state.Hover(logger, request.ID, request.Params.TextDocument.URI, request.Params.Position))
+	case "textDocument/definition":
+		var request lsp.DefinitionRequest
+		if err := json.Unmarshal(content, &request); err != nil {
+			logger.Println("Error unmarshalling definition request: ", err)
+			return
+		}
+		writeResponse(writer, state.Definition(logger, request.ID, request.Params.TextDocument.URI, request.Params.Position))
+	case "textDocument/codeAction":
+		var request lsp.CodeActionRequest
+		if err := json.Unmarshal(content, &request); err != nil {
+			logger.Println("Error unmarshalling code action request: ", err)
+			return
+		}
+		writeResponse(writer, state.CodeAction(logger, request.ID, request.Params.TextDocument.URI))
+	case "textDocument/completion":
 	case "shutdown":
 		logger.Println("Shutting down")
 	case "exit":

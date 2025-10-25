@@ -32,6 +32,9 @@ type ServerInfo struct {
 type ServerCapabilities struct {
 	TextDocumentSync int `json:"textDocumentSync"`
 	HoverProvider bool `json:"hoverProvider"`
+	DefinitionProvider bool `json:"definitionProvider"`
+	CodeActionProvider bool `json:"codeActionProvider"`
+	CompletionProvider map[string]any `json:"completionProvider"`
 }
 
 func NewInitializeResponse(id int) InitializeResponse {
@@ -44,6 +47,9 @@ func NewInitializeResponse(id int) InitializeResponse {
 			Capabilities: ServerCapabilities{
 				TextDocumentSync: 1,
 				HoverProvider: true,
+				DefinitionProvider: true,
+				CodeActionProvider: true,
+				CompletionProvider: map[string]any{},
 			},
 			ServerInfo: ServerInfo{
 				Name: "educationallsp",

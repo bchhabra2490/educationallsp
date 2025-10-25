@@ -56,3 +56,88 @@ func (s *State) Hover(logger *log.Logger,id int, uri string, position lsp.Positi
 		},
 	}
 }
+
+func (s *State) Definition(logger *log.Logger, id int, uri string, position lsp.Position) lsp.DefinitionResponse{
+	
+	return lsp.DefinitionResponse{
+		Response: lsp.Response{
+			RPC: "2.0",
+			ID: &id,
+		},
+		Result: lsp.Location{
+			URI: uri,
+			Range: lsp.Range{
+				Start: lsp.Position{
+					Line: position.Line - 1,
+					Character: 0,
+				},
+				End: lsp.Position{
+					Line: position.Line - 1,
+					Character: 0,
+				},
+			},
+		},
+	}
+}
+
+func (s *State) CodeAction(logger *log.Logger, id int, uri string) lsp.TextDocumentCodeActionResponse{
+	text := s.Documents[uri]
+
+	actions := []lsp.CodeAction{}
+	for row, line := range strings.Split(text, "\n") {
+		idx := strings.Index(line, "VS Code")
+		if idx != -1 {
+			replaceChange := map[string][]lsp.TextEdit{}
+			replaceChange[uri] = []lsp.TextEdit{
+				{
+					Range: LineRange(row, idx, idx + len("VS Code")),
+					NewText: "Neovim",
+				},
+			}
+
+			actions = append(actions, lsp.CodeAction{
+				Title: "Replace VS Code with Neovim",
+				Edit: &lsp.WorkspaceEdit{
+					Changes: replaceChange,
+				},
+			})
+
+			censorChange := map[string][]lsp.TextEdit{}
+			censorChange[uri] = []lsp.TextEdit{
+				{
+					Range: LineRange(row, idx, idx + len("VS Code")),
+					NewText: "********",
+				},
+			}
+			
+			actions = append(actions, lsp.CodeAction{
+				Title: "Censor VS Code",
+				Edit: &lsp.WorkspaceEdit{
+					Changes: censorChange,
+				},
+			})
+		}
+
+	}
+
+	return lsp.TextDocumentCodeActionResponse{
+		Response: lsp.Response{
+			RPC: "2.0",
+			ID: &id,
+		},
+		Result: actions,
+	}
+}
+
+func LineRange(row, start, end int) lsp.Range{
+	return lsp.Range{
+		Start: lsp.Position{
+			Line: row,
+			Character: start,
+		},
+		End: lsp.Position{
+			Line: row,
+			Character: end,
+		},
+	}
+}
