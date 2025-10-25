@@ -7,6 +7,7 @@ import (
 	"educationallsp/rpc"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 )
@@ -21,7 +22,7 @@ func main(){
 	scanner.Split(rpc.Split)
 
 	state := analysis.NewState()
-
+	writer := os.Stdout
 	for scanner.Scan() {
 		msg := scanner.Bytes()
 		method, content, err := rpc.DecodeMessage(msg)
@@ -29,11 +30,11 @@ func main(){
 			logger.Println("Error decoding message: ", err)
 			continue
 		}
-		handleMessage(logger, state, method, content)
+		handleMessage(logger, writer, state, method, content)
 	}
 }
 
-func handleMessage(logger *log.Logger, state analysis.State, method string, content []byte){
+func handleMessage(logger *log.Logger, writer io.Writer, state analysis.State, method string, content []byte){
 	logger.Println("Received message: ", method)
 	switch method {
 	case "initialize":
@@ -44,11 +45,7 @@ func handleMessage(logger *log.Logger, state analysis.State, method string, cont
 		}
 		logger.Printf("Connect to: %s %s", request.Params.ClientInfo.Name, request.Params.ClientInfo.Version)
 
-		response := lsp.NewInitializeResponse(request.ID)
-		writer := os.Stdout
-		writer.Write([]byte(rpc.EncodeMessage(response)))
-
-		logger.Print("Sent the reply.")
+		writeResponse(writer, lsp.NewInitializeResponse(request.ID))
 	case "textDocument/didOpen":
 		var notification lsp.DidOpenTextDocumentNotification
 		if err := json.Unmarshal(content, &notification); err != nil {
@@ -67,11 +64,23 @@ func handleMessage(logger *log.Logger, state analysis.State, method string, cont
 			logger.Printf("Content change: %s", contentChange.Text)
 			state.UpdateDocument(notification.Params.TextDocument.URI, contentChange.Text)
 		}
+	case "textDocument/hover":
+		var request lsp.HoverRequest
+		if err := json.Unmarshal(content, &request); err != nil {
+			logger.Println("Error unmarshalling hover request: ", err)
+			return
+		}
+		writeResponse(writer, state.Hover(logger, request.ID, request.Params.TextDocument.URI, request.Params.Position))
 	case "shutdown":
 		logger.Println("Shutting down")
 	case "exit":
 		logger.Println("Exiting")
 	}
+}
+
+func writeResponse(writer io.Writer, msg any){
+	reply := rpc.EncodeMessage(msg)
+	writer.Write([]byte(reply))
 }
 
 func getLogger(filename string) *log.Logger{

@@ -7,6 +7,7 @@ An simple Language Server Protocol (LSP) implementation in Go for educational pu
 - Basic LSP message handling (initialize, shutdown, exit)
 - JSON-RPC over stdio communication
 - Neovim integration
+- **AI-powered code explanations** using OpenAI (optional)
 - Logging for debugging
 ## Project Structure
 
@@ -19,6 +20,11 @@ educationallsp/
 ├── lsp/                 # LSP protocol definitions
 │   ├── lsp.go          # Basic LSP message types
 │   └── initialize.go   # Initialize request/response types
+├── analysis/            # Analysis and explanation services
+│   ├── state.go        # Document state management
+│   └── explanation_service.go  # AI explanation service
+├── openai/              # OpenAI API client
+│   └── openai.go       # OpenAI completions client
 ├── go.mod              # Go module definition
 └── educationallsp.log  # Server log file (created at runtime)
 ```
@@ -31,6 +37,19 @@ educationallsp/
    go build -o main main.go
    ```
 3. The binary will be created as `main` in the project directory
+
+## AI-Powered Code Explanations (Optional)
+
+The server can provide AI-powered explanations of code lines when you hover over them in Neovim. To enable this feature:
+
+1. **Get an OpenAI API key** from [OpenAI](https://platform.openai.com/api-keys)
+2. **Set the environment variable**:
+   ```bash
+   export OPENAI_API_KEY="your-api-key-here"
+   ```
+3. **Restart the LSP server** - it will automatically detect the API key and enable AI explanations
+
+**Note**: Without an API key, the server will still work but will only show the raw line content on hover instead of AI explanations.
 
 ## Connecting to Neovim
 
