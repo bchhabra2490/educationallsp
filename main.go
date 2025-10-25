@@ -52,7 +52,17 @@ func handleMessage(logger *log.Logger, writer io.Writer, state analysis.State, m
 			logger.Println("Error unmarshalling did open text document notification: ", err)
 			return
 		}
-		state.OpenDocument(notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
+		diagnostics := state.OpenDocument(notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
+		writeResponse(writer, lsp.PublishDiagnosticsNotification{
+			Notification: lsp.Notification{
+				RPC: "2.0",
+				Method: "textDocument/publishDiagnostics",
+			},
+			Params: lsp.PublishDiagnosticsParams{
+				URI: notification.Params.TextDocument.URI,
+				Diagnostics: diagnostics,
+			},
+		})
 	case "textDocument/didChange":
 		var notification lsp.TextDocumentDidChangeNotification
 		if err := json.Unmarshal(content, &notification); err != nil {
@@ -62,7 +72,17 @@ func handleMessage(logger *log.Logger, writer io.Writer, state analysis.State, m
 		logger.Printf("Did change text document: %s %s", notification.Params.TextDocument.URI, notification.Params.ContentChanges)
 		for _, contentChange := range notification.Params.ContentChanges {
 			logger.Printf("Content change: %s", contentChange.Text)
-			state.UpdateDocument(notification.Params.TextDocument.URI, contentChange.Text)
+			diagnostics := state.UpdateDocument(notification.Params.TextDocument.URI, contentChange.Text)
+			writeResponse(writer, lsp.PublishDiagnosticsNotification{
+				Notification: lsp.Notification{
+					RPC: "2.0",
+					Method: "textDocument/publishDiagnostics",
+				},
+				Params: lsp.PublishDiagnosticsParams{
+					URI: notification.Params.TextDocument.URI,
+					Diagnostics: diagnostics,
+				},
+			})
 		}
 	case "textDocument/hover":
 		var request lsp.HoverRequest
@@ -86,6 +106,13 @@ func handleMessage(logger *log.Logger, writer io.Writer, state analysis.State, m
 		}
 		writeResponse(writer, state.CodeAction(logger, request.ID, request.Params.TextDocument.URI))
 	case "textDocument/completion":
+		logger.Println("Completion request")
+		var request lsp.CompletionRequest
+		if err := json.Unmarshal(content, &request); err != nil {
+			logger.Println("Error unmarshalling completion request: ", err)
+			return
+		}
+		writeResponse(writer, state.Completion(logger, request.ID, request.Params.TextDocument.URI, request.Params.Position))
 	case "shutdown":
 		logger.Println("Shutting down")
 	case "exit":

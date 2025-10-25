@@ -113,6 +113,14 @@ vim.cmd('source /path/to/your/educationallsp/load_test_lsp.lua')
    - "Educationallsp LSP client initialized"
    - "Educationallsp attached to buffer X"
 
+3. **Test hover functionality** - hover over any line to see AI explanations
+
+4. **Test completion functionality**:
+   - Enter insert mode (`i`)
+   - Type some text
+   - Press `Ctrl+Space` to trigger completion
+   - Use `Tab`/`Shift+Tab` to navigate suggestions
+
 3. **Check the log file** (`educationallsp.log`) to see what messages the server is receiving:
    ```bash
    tail -f educationallsp.log

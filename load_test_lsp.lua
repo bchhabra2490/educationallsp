@@ -15,6 +15,15 @@ local client = vim.lsp.start_client {
     end,
     on_attach = function(client, bufnr)
         vim.notify("Educationallsp attached to buffer " .. bufnr, vim.log.levels.INFO)
+        
+        -- Enable completion triggered by <c-x><c-o>
+        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+        
+        -- Set up completion keybindings
+        local opts = { noremap = true, silent = true }
+        vim.api.nvim_buf_set_keymap(bufnr, 'i', '<C-Space>', 'completion#trigger()', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', {expr = true})
     end,
 }
 

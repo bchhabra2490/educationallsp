@@ -14,12 +14,30 @@ func NewState() State {
 	return State{Documents: map[string]string{}}
 }
 
-func (s *State) OpenDocument(uri, text string) {
-	s.Documents[uri] = text
+func getDiagnosticsForFile(text string) []lsp.Diagnostic {
+	diagnostics := []lsp.Diagnostic{}
+	for row, line := range strings.Split(text, "\n") {
+		idx := strings.Index(line, "VS Code")
+		if idx != -1 {
+			diagnostics = append(diagnostics, lsp.Diagnostic{
+				Range: LineRange(row, idx, idx + len("VS Code")),
+				Message: "Please make sure we use good language in this code",
+				Severity: 1,
+				Source: "educationallsp",
+			})
+		}
+	}
+	return diagnostics
 }
 
-func (s *State) UpdateDocument(uri, text string) {
+func (s *State) OpenDocument(uri, text string) []lsp.Diagnostic {
 	s.Documents[uri] = text
+	return getDiagnosticsForFile(text)
+}
+
+func (s *State) UpdateDocument(uri, text string) []lsp.Diagnostic {
+	s.Documents[uri] = text
+	return getDiagnosticsForFile(text)
 }
 
 func (s *State) Hover(logger *log.Logger,id int, uri string, position lsp.Position) lsp.HoverResponse{
@@ -126,6 +144,24 @@ func (s *State) CodeAction(logger *log.Logger, id int, uri string) lsp.TextDocum
 			ID: &id,
 		},
 		Result: actions,
+	}
+}
+
+func (s *State) Completion(logger *log.Logger, id int, uri string, position lsp.Position) lsp.CompletionResponse{
+	return lsp.CompletionResponse{
+		Response: lsp.Response{
+			RPC: "2.0",
+			ID: &id,
+		},
+		Result: lsp.CompletionResult{
+			Items: []lsp.CompletionItem{
+				{
+					Label: "VS Code",
+					Detail: "VS Code is a code editor",
+					Documentation: "VS Code is a code editor",
+				},
+			},
+		},
 	}
 }
 

@@ -6,5 +6,20 @@ type CompletionRequest struct {
 }
 
 type CompletionParams struct{
-	
+	TextDocumentPositionParams
+}
+
+type CompletionResponse struct {
+	Response
+	Result CompletionResult `json:"result"`
+}
+
+type CompletionResult struct {
+	Items []CompletionItem `json:"items"`
+}
+
+type CompletionItem struct {
+	Label string `json:"label"`
+	Detail string `json:"detail"`
+	Documentation string `json:"documentation"`
 }
