@@ -98,9 +98,14 @@ vim.cmd('source /path/to/your/educationallsp/load_test_lsp.lua')
 
 ## Testing the Connection
 
-1. **Open a markdown file** in Neovim:
+1. **Open any file** in Neovim:
    ```bash
-   nvim test.md
+   nvim test.go
+   # or
+   nvim test.py
+   # or
+   nvim test.js
+   # or any other file type
    ```
 
 2. **Check for notifications** - you should see messages like:
@@ -131,7 +136,7 @@ vim.cmd('source /path/to/your/educationallsp/load_test_lsp.lua')
 - **Check Neovim version**: Ensure you're using Neovim 0.5+ (LSP support)
 
 ### No LSP Features Working
-- **Check file type**: The server is configured to attach to markdown files
+- **Check file type**: The server is configured to attach to all file types
 - **Check LSP status**: Use `:LspInfo` to see if the client is attached
 - **Check logs**: Look for error messages in the log file
 

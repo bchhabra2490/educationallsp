@@ -1,12 +1,12 @@
-[educationallsp] 2025/10/25 11:17:01 main.go:19: Starting educationallsp
-[educationallsp] 2025/10/25 11:17:01 main.go:38: Received message:  initialize
-[educationallsp] 2025/10/25 11:17:01 main.go:46: Connect to: Neovim 0.11.4
-[educationallsp] 2025/10/25 11:17:01 main.go:38: Received message:  initialized
-[educationallsp] 2025/10/25 11:17:01 main.go:38: Received message:  textDocument/didOpen
-[educationallsp] 2025/10/25 11:17:13 main.go:38: Received message:  textDocument/hover
-[educationallsp] 2025/10/25 11:17:13 state.go:39: Hovering over line: ## Features
-[educationallsp] 2025/10/25 11:17:15 explanation_service.go:24: Explanation:  This section lists the main features provided by the LSP server, highlighting its capabilities such as basic message handling, JSON-RPC communication, integration with Neovim, optional AI-powered code explanations, and logging for debugging purposes.
-[educationallsp] 2025/10/25 11:17:15 main.go:38: Received message:  textDocument/didOpen
-[educationallsp] 2025/10/25 11:17:44 main.go:38: Received message:  textDocument/didClose
-[educationallsp] 2025/10/25 11:17:48 main.go:38: Received message:  shutdown
-[educationallsp] 2025/10/25 11:17:48 main.go:75: Shutting down
+[educationallsp] 2025/10/25 11:19:38 main.go:19: Starting educationallsp
+[educationallsp] 2025/10/25 11:19:38 main.go:38: Received message:  initialize
+[educationallsp] 2025/10/25 11:19:38 main.go:46: Connect to: Neovim 0.11.4
+[educationallsp] 2025/10/25 11:19:38 main.go:38: Received message:  initialized
+[educationallsp] 2025/10/25 11:19:38 main.go:38: Received message:  textDocument/didOpen
+[educationallsp] 2025/10/25 11:19:45 main.go:38: Received message:  textDocument/hover
+[educationallsp] 2025/10/25 11:19:45 state.go:39: Hovering over line: 	scanner := bufio.NewScanner(os.Stdin)
+[educationallsp] 2025/10/25 11:19:46 explanation_service.go:24: Explanation:  The line of code creates a new scanner object that reads input from the standard input (like keyboard input). This scanner can be used to break the input into tokens (like words or lines) for easier processing.
+[educationallsp] 2025/10/25 11:19:46 main.go:38: Received message:  textDocument/didOpen
+[educationallsp] 2025/10/25 11:19:55 main.go:38: Received message:  textDocument/didClose
+[educationallsp] 2025/10/25 11:19:58 main.go:38: Received message:  shutdown
+[educationallsp] 2025/10/25 11:19:58 main.go:75: Shutting down

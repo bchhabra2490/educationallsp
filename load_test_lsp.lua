@@ -25,9 +25,9 @@ end
 
 vim.notify("Educationallsp client started", vim.log.levels.INFO)
 
--- Attach to markdown files
+-- Attach to all file types
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = "markdown",
+    pattern = "*",
     callback = function()
         vim.lsp.buf_attach_client(0, client)
     end,
