@@ -55,8 +55,18 @@ func handleMessage(logger *log.Logger, state analysis.State, method string, cont
 			logger.Println("Error unmarshalling did open text document notification: ", err)
 			return
 		}
-		logger.Printf("Did open text document: %s %s", notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
 		state.OpenDocument(notification.Params.TextDocument.URI, notification.Params.TextDocument.Text)
+	case "textDocument/didChange":
+		var notification lsp.TextDocumentDidChangeNotification
+		if err := json.Unmarshal(content, &notification); err != nil {
+			logger.Println("Error unmarshalling did change text document notification: ", err)
+			return
+		}
+		logger.Printf("Did change text document: %s %s", notification.Params.TextDocument.URI, notification.Params.ContentChanges)
+		for _, contentChange := range notification.Params.ContentChanges {
+			logger.Printf("Content change: %s", contentChange.Text)
+			state.UpdateDocument(notification.Params.TextDocument.URI, contentChange.Text)
+		}
 	case "shutdown":
 		logger.Println("Shutting down")
 	case "exit":
