@@ -40,10 +40,12 @@ func (s *State) UpdateDocument(uri, text string) []lsp.Diagnostic {
 	return getDiagnosticsForFile(text)
 }
 
-func (s *State) Hover(logger *log.Logger,id int, uri string, position lsp.Position) lsp.HoverResponse{
+func (s *State) Hover(logger *log.Logger, id int, uri string, position lsp.Position) lsp.HoverResponse{
+	logger.Printf("Hover request for URI: %s, Position: line=%d, character=%d", uri, position.Line, position.Character)
 
 	document, ok := s.Documents[uri]
 	if !ok {
+		logger.Printf("Document not found for URI: %s", uri)
 		return lsp.HoverResponse{
 			Response: lsp.Response{
 				RPC: "2.0",
@@ -53,10 +55,8 @@ func (s *State) Hover(logger *log.Logger,id int, uri string, position lsp.Positi
 	}
 
 	lines := strings.Split(document, "\n")
-	line := lines[position.Line]
-	logger.Printf("Hovering over line: %s", line)
-	explanation, err := ExplainCode(logger, line, document)
-	if err != nil {
+	if position.Line >= len(lines) {
+		logger.Printf("Line %d out of bounds (document has %d lines)", position.Line, len(lines))
 		return lsp.HoverResponse{
 			Response: lsp.Response{
 				RPC: "2.0",
@@ -64,6 +64,17 @@ func (s *State) Hover(logger *log.Logger,id int, uri string, position lsp.Positi
 			},
 		}
 	}
+
+	line := lines[position.Line]
+	logger.Printf("Hovering over line %d: %s", position.Line, line)
+	
+	// Try to get AI explanation, fallback to line content if it fails
+	explanation, err := ExplainCode(logger, line, document)
+	if err != nil {
+		logger.Printf("Error getting explanation: %v, falling back to line content", err)
+		explanation = line
+	}
+	
 	return lsp.HoverResponse{
 		Response: lsp.Response{
 			RPC: "2.0",

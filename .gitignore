@@ -1,0 +1,4 @@
+node_modules/
+vscode-extension/out/
+vscode-extension/node_modules/
+vscode-extension/educationallsp-*.vsix

@@ -51,6 +51,59 @@ The server can provide AI-powered explanations of code lines when you hover over
 
 **Note**: Without an API key, the server will still work but will only show the raw line content on hover instead of AI explanations.
 
+## Connecting to VSCode
+
+### Method 1: Install as VSCode Extension (Recommended)
+
+1. **Navigate to the VSCode extension directory**:
+   ```bash
+   cd vscode-extension
+   ```
+
+2. **Run the installation script**:
+   ```bash
+   ./install.sh
+   ```
+
+3. **Install the extension in VSCode**:
+   - Open VSCode
+   - Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+   - Type "Extensions: Install from VSIX"
+   - Select the generated `.vsix` file
+
+4. **Configure the extension** (optional):
+   - Open VSCode Settings (`Ctrl+,`)
+   - Search for "Educational LSP"
+   - Set your OpenAI API key if you want AI explanations
+   - Adjust the server path if needed
+
+### Method 2: Manual VSCode Setup
+
+1. **Build the LSP server**:
+   ```bash
+   go build -o main main.go
+   ```
+
+2. **Set environment variable** (optional, for AI features):
+   ```bash
+   export OPENAI_API_KEY="your-api-key-here"
+   ```
+
+3. **Configure VSCode settings.json**:
+   ```json
+   {
+     "educationallsp.openaiApiKey": "your-api-key-here",
+     "educationallsp.serverPath": "./main"
+   }
+   ```
+
+### Testing in VSCode
+
+1. **Open any file** in VSCode
+2. **Hover over code** to see AI explanations (if API key is set)
+3. **Use Ctrl+Space** for completion suggestions
+4. **Check the Output panel** → "Educational LSP Server" for logs
+
 ## Connecting to Neovim
 
 ### Method 1: Automatic Configuration (Recommended)
